@@ -22,13 +22,14 @@ Class IceCoffee implements Beverages
 
 Enum DrinkSizes - "SMALL", "MEDIUM", "LARGE"
 
-Enum Additives - "MILK", "LAKTOSFREE MILK", "ALMONDMILK"
+Enum Additives - "MILK", "LAKTOSFREE_MILK", "ALMONDMILK"
 
-Enum Sweeteners - "SUGAR", "BROWN SUGAR", "HONEY", "STEVIA"
+Enum Sweeteners - "SUGAR", "BROWN_SUGAR", "HONEY", "STEVIA"
 
 Class MainMenu
 String MainMenu - "Make your choice from 1-3
-1. Place order
+1. View beverage menu
+2. Place order
     "Choose a beverage":
     1. Coffee
         - Enter drink size
@@ -67,6 +68,6 @@ String MainMenu - "Make your choice from 1-3
 
     "Done? Y or N"
     Y - Saving order... Back to MainMenu
-2. View orders
+3. View orders
 
 
