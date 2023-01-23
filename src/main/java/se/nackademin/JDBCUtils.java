@@ -7,13 +7,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-public class JBCUtils {
-
-class JDBCUtils {
+import java.util.ArrayList;
+import java.util.List;
+import se.nackademin.Beverages.DrinkSizes;
+import se.nackademin.CoffeeDrink;
+public class JDBCUtils {
     String hostname;
     String userName;
     String password; // Never add hardcoded passwords to your code
     String port;
+    Connection conn;
 
     JDBCUtils(String hostname, String port) {
         this.hostname = hostname;
@@ -28,6 +31,36 @@ class JDBCUtils {
         this.password = password;
     }
 
+    public List<CoffeeDrink> listCoffeeDrinksDetails() {
+        List<CoffeeDrink> list = new ArrayList<CoffeeDrink>();
+        CoffeeDrink coffeeDrink = null;
+        ResultSet rs = null;
+        Statement stmt = null;
+        // Write the SQL query
+        String query = "select * from coffeedrinks";
+        try {
+            stmt = this.conn.createStatement();
+            rs = stmt.executeQuery(query);
+            // Iterate the whole resultset and add the data
+            // in the list
+            while (rs.next()) {
+                String drinkTitle = rs.getString("title");
+                DrinkSizes drinkSize =  DrinkSizes.valueOf(rs.getString("size"));
+                double drinkPrice = rs.getDouble("price");
+                
+
+                coffeeDrink = new CoffeeDrink(drinkTitle, drinkSize, drinkPrice);
+
+                list.add(coffeeDrink);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
     public void createDatabase(Connection conn, String name) throws SQLException {
         String createString = "create database IF NOT EXISTS mydb";
 
@@ -36,6 +69,30 @@ class JDBCUtils {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void connectToDatabase() {
+        try {
+            System.out.println("Connect to mysql");
+            JDBCUtils jdbcUtils = new JDBCUtils("127.0.0.1", "3306");
+            jdbcUtils.setUsername("root"); // Never use the root user in real apps
+            jdbcUtils.setPassword("miradocker94"); // Never add hardcoded passwords to your code
+
+            this.conn = jdbcUtils.getConnection();
+            //jdbcUtils.createDatabase(conn, "Beverage menu"); // This will create the database with no tables
+            //jdbcUtils.createTable(conn);
+            //jdbcUtils.insertIntoTable(conn);
+            //jdbcUtils.readTable(conn, "drinks");
+            //jdbcUtils.updateValue(conn);
+            //jdbcUtils.deleteRow(conn);
+            //jdbcUtils.readTable(conn, "drinks");
+            }
+        catch (SQLException e){
+            System.out.println("Something went wrong with mysql");
+            }
+        finally {
+            System.out.println("I am in final block");
+            }
     }
 
     public void createTable(Connection conn) {
@@ -54,19 +111,19 @@ class JDBCUtils {
             }
         }
         public void insertIntoTable(Connection conn) throws SQLException {
-            String insertCoffee = "INSERT INTO beverages(title, size, price)" +
+            String insertCoffee = "INSERT INTO coffeedrinks(title, size, price)" +
                                         "VALUES('Coffe', 'SMALL' 35), ('Coffee', 'MEDIUM', 45), ('Coffee', 'LARGE', 55)";
-            String insertCappuccino = "INSERT INTO drinks(title,size, price)" +
+            String insertCappuccino = "INSERT INTO coffeedrinks(title,size, price)" +
                                         "VALUES('Cappuccino', 'SMALL' 55), ('Cappuccino', 'MEDIUM', 65), ('Cappuccino', 'LARGE', 75)";
-            String insertLatte = "INSERT INTO beverages(title, size, price)" +
+            String insertLatte = "INSERT INTO coffeedrinks(title, size, price)" +
                                         "VALUES('Latte', 'SMALL' 55), ('Latte', 'MEDIUM', 65), ('Latte', 'LARGE', 75)";
-            String insertAmericano = "INSERT INTO beverages(title, size, price)" +
+            String insertAmericano = "INSERT INTO coffeedrinks(title, size, price)" +
                                         "VALUES('Americano', 'SMALL' 45), ('Latte', 'MEDIUM', 55), ('Latte', 'LARGE', 65)";
-            String insertEspresso = "INSERT INTO beverages(title, size, price)" +
+            String insertEspresso = "INSERT INTO coffeedrinks(title, size, price)" +
                                         "VALUES('Espresso', 'SMALL' 45), ('Espresso', 'MEDIUM', 55), ('Espresso', 'LARGE', 65)";
-            String insertMacchiato = "INSERT INTO beverages(title, size, price)" +
+            String insertMacchiato = "INSERT INTO coffeedrinks(title, size, price)" +
                                         "VALUES('Macchiato', 'SMALL' 55), ('Macchiato', 'MEDIUM', 65), ('Macchiato', 'LARGE', 75)";
-            String insertIceCoffee = "INSERT INTO beverages(title, size, price)" +
+            String insertIceCoffee = "INSERT INTO coffeedrinks(title, size, price)" +
                                         "VALUES('Ice Coffe', 'SMALL' 35), ('Ice Coffee', 'MEDIUM', 45), ('Ice Coffee', 'LARGE', 55)";
             try (Statement stmt = conn.createStatement()) {
                 stmt.executeUpdate(insertCappuccino);
@@ -76,7 +133,7 @@ class JDBCUtils {
             }
         }
 
-        public void readTable(Connection conn, String tableName) throws SQLException {
+        public void read(Connection conn, String tableName) throws SQLException {
             String select = "SELECT * FROM " + tableName;
 
             try (Statement stmt = conn.createStatement()) {
@@ -123,4 +180,4 @@ class JDBCUtils {
         return conn;
     }
 }
-}
+

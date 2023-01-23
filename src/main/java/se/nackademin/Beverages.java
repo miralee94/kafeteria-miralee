@@ -6,16 +6,16 @@ interface Beverages{
         MEDIUM,
         LARGE
     };
-    enum Additives{
+    enum DrinkAdditives{
         MILK,
         LAKTOSFREE_MILK,
         ALMONDMILK,
     };
-    enum Sweeteners{
+    enum DrinkSweeteners{
         SUGAR,
         BROWN_SUGAR,
         HONEY,
         STEVIA
     };
-    public boolean laktosfree();
+
 }
