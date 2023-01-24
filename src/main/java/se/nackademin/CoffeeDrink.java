@@ -20,9 +20,14 @@ public class CoffeeDrink implements Beverages{
         this.drinkId = drinkId;
     }
     public int getDrinkId() {return this.drinkId;}
-    public String getTitles() {return this.drinkTitle;}
-    public DrinkSizes getDrinksSize() {return this.drinkSize;}
-    public double getDrinksPrice() {return this.drinkPrice;}
+    public String getDrinkTitle() {return this.drinkTitle;}
+    public DrinkSizes getDrinkSize() {return this.drinkSize;}
+    public double getDrinkPrice() {return this.drinkPrice;}
     public DrinkAdditives getDrinkAdditives() {return this.drinkAdditive;}
     public DrinkSweeteners getDrinkSweeteners() {return this.drinkSweetener;}
+
+    @Override
+    public String toString() {
+        return this.drinkTitle + " "+ this.drinkSize + " " + this.drinkPrice;
+    }
 }
