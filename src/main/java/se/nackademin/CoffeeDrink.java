@@ -38,6 +38,10 @@ public class CoffeeDrink implements Beverages{
 
     @Override
     public String toString() {
-        return this.drinkTitle + " "+ this.drinkSize + " " + this.drinkPrice;
+        return this.drinkTitle + " " + 
+        this.drinkSize + " " + 
+        this.drinkPrice + " " + 
+        this.drinkAdditive + " " + 
+        this.drinkSweetener;
     }
 }

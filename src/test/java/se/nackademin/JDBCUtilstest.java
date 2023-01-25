@@ -5,26 +5,31 @@ import static org.junit.Assert.assertNotEquals;
 import java.util.List;
 import org.junit.Test;
 
+import se.nackademin.Beverages.DrinkSizes;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class JDBCUtilstest {
+public class JDBCUtilsTest {
 
     JDBCUtils JDBCUtilsObject = new JDBCUtils("127.0.0.1", "3306");
     @Test
-    public void listDrinks() {
+    public void checkDefaultMenu() {
         JDBCUtilsObject.connectToDatabase();
-
         List<CoffeeDrink> listDrinkDetails = JDBCUtilsObject.listBeverageMenuDetails();
-        // Checking whether totally 2 freelancers are available
-        assertEquals(listDrinkDetails.size(), 0);
-        // Checking whether first freelancer id is 1
+        // Checking whether totally 21 drinks are available
+        assertEquals(listDrinkDetails.size(), 21);
+
+        // Checking whether first drink id is 1
         assertEquals(listDrinkDetails.get(0).getDrinkId(),1);
-        // Checking whether first freelancer name is Freelancer A
+
+        // Checking whether first drink title is Coffee
         assertEquals(listDrinkDetails.get(0).getDrinkTitle(),"Coffee");
-        // Checking whether second  freelancer age is 20
-        assertEquals(listDrinkDetails.get(1).getDrinkSize(),"MEDIUM");
-        // Checking whether second  freelancer price per hour  is 2000
+
+        // Checking whether second  drink size is MEDIUM
+        assertEquals(listDrinkDetails.get(1).getDrinkSize(), DrinkSizes.MEDIUM);
+
+        // Checking whether second  drink price is 45.00
         assertEquals(listDrinkDetails.get(1).getDrinkPrice(),45.00, 0);
     }
 

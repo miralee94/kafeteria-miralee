@@ -3,6 +3,8 @@ package se.nackademin;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.swing.JButton;
+
 import se.nackademin.Beverages.DrinkAdditives;
 import se.nackademin.Beverages.DrinkSizes;
 import se.nackademin.Beverages.DrinkSweeteners;
@@ -45,84 +47,101 @@ public class Menu {
 
     static void menuChoices(int choice) throws IOException, ClassNotFoundException {
         JDBCUtils JdbcUtilsForMenu = new JDBCUtils("127.0.0.1", "3306");
+        JdbcUtilsForMenu.connectToDatabase();
         switch (choice) {
             case 1:
-                System.out.println("Connecting to database");
-                JdbcUtilsForMenu.connectToDatabase();
                 JdbcUtilsForMenu.createDatabase("Cafeteria");
                 JdbcUtilsForMenu.createTableMenu();
                 JdbcUtilsForMenu.createTableOrders();
-                JdbcUtilsForMenu.insertDrinksIntoTable();
+                //JdbcUtilsForMenu.insertDrinksIntoTable();
                 break;
             case 2:
                 System.out.println("View beverage menu");
-                JdbcUtilsForMenu.connectToDatabase();
                 List<CoffeeDrink>beverageMenu = JdbcUtilsForMenu.listBeverageMenuDetails();
                 beverageMenu.forEach(System.out::println);
                 break;
             case 3:
-                //System.out.println("Place order");
-                //    Scanner sc = new Scanner(System.in);
-                //    System.out.print("Enter title of beverage: ");
-                //    String title = sc.nextLine();
-                //    System.out.print("Enter a drink size: ");
-                //    String size = sc.nextLine();
-                //    System.out.print("Additives Y or N?");
-                //    String answer = sc.nextLine();
-                //    if (answer.equals("Y")){
-                //        System.out.print("Enter additives: ");
-                //        String additive = sc.nextLine();
-                //    }
-                //        else {
-                //        break;
-                //        }
-                //    System.out.print("Sweetener Y or N?");
-                //    String answer2 = sc.nextLine();
-                //    if (answer2.equals("Y")){
-                //        System.out.print("Enter sweeteners: ");
-                //        String sweetener = sc.nextLine();
-                //    }
-                //    else {
-                //        break;
-                //    }
-                //break;
                 System.out.println("Place order");
                 Scanner sc = new Scanner(System.in);
                 System.out.print("Enter title of beverage: ");
                 String coffee = sc.nextLine();
                 System.out.println("Enter size: ");
-                DrinkSizes size = DrinkSizes.valueOf(sc.nextLine());
-                JdbcUtilsForMenu.connectToDatabase();
+                DrinkSizes size = DrinkSizes.valueOf(sc.nextLine().toUpperCase());
+                //JdbcUtilsForMenu.connectToDatabase();
                 CoffeeDrink result = null;
+                DrinkSweeteners sweetener = null;
+                DrinkAdditives additive = null;
+                result = JdbcUtilsForMenu.getRow(coffee, size);
                 switch (coffee) {
                     case "Coffee":
-                        result = JdbcUtilsForMenu.getRow(coffee, size);
-                        //String getName;
-                        //int coffeeId = 1;
-                        //getName = listDrinkDetails.get(coffeeId);
-                        System.out.print("Enter additives: ");
-                        DrinkAdditives additive = DrinkAdditives.valueOf(sc.nextLine());
+                        System.out.println(java.util.Arrays.asList(DrinkAdditives.values()));
+                        System.out.println("Enter additives: ");
+                        additive = DrinkAdditives.valueOf(sc.nextLine().toUpperCase());
+
+                        System.out.println(java.util.Arrays.asList(DrinkSweeteners.values()));
                         System.out.println("Enter sweeteners: ");
-                        DrinkSweeteners sweetener = DrinkSweeteners.valueOf(sc.nextLine());
+                        sweetener = DrinkSweeteners.valueOf(sc.nextLine().toUpperCase());
+
                         result.setDrinkAdditive(additive);
                         result.setDrinkSweetener(sweetener);
-                        JdbcUtilsForMenu.insertOrder(result);
+                        break;
+
                     case "Cappuccino":
-                        result = JdbcUtilsForMenu.getRow(coffee, size);
+                        System.out.println(java.util.Arrays.asList(DrinkSweeteners.values()));
+                        System.out.println("Enter sweeteners: ");
+                        sweetener = DrinkSweeteners.valueOf(sc.nextLine().toUpperCase());
+
+                        result.setDrinkSweetener(sweetener);
                     case "Latte":
-                        result = JdbcUtilsForMenu.getRow(coffee, size);
+
+                        System.out.println(java.util.Arrays.asList(DrinkSweeteners.values()));
+                        System.out.println("Enter sweeteners: ");
+                        sweetener = DrinkSweeteners.valueOf(sc.nextLine().toUpperCase());
+
+                        result.setDrinkSweetener(sweetener);
+                        break;
+
                     case "Americano":
-                        result = JdbcUtilsForMenu.getRow(coffee, size);
+                        System.out.println(java.util.Arrays.asList(DrinkAdditives.values()));
+                        System.out.println("Enter additives: ");
+                        additive = DrinkAdditives.valueOf(sc.nextLine().toUpperCase());
+
+                        System.out.println(java.util.Arrays.asList(DrinkSweeteners.values()));
+                        System.out.println("Enter sweeteners: ");
+                        sweetener = DrinkSweeteners.valueOf(sc.nextLine().toUpperCase());
+
+                        result.setDrinkAdditive(additive);
+                        result.setDrinkSweetener(sweetener);
+                        break;
                     case "Espresso":
-                        result = JdbcUtilsForMenu.getRow(coffee, size);
+                        System.out.println(java.util.Arrays.asList(DrinkSweeteners.values()));
+                        System.out.println("Enter sweeteners: ");
+                        sweetener = DrinkSweeteners.valueOf(sc.nextLine().toUpperCase());
+
+                        result.setDrinkSweetener(sweetener);
+                        break;
+
                     case "Macchiato":
-                        result = JdbcUtilsForMenu.getRow(coffee, size);
+                        break;
+
                     case "Ice Coffee":
-                        result = JdbcUtilsForMenu.getRow(coffee, size);
+                        System.out.println(java.util.Arrays.asList(DrinkAdditives.values()));
+                        System.out.println("Enter additives: ");
+                        additive = DrinkAdditives.valueOf(sc.nextLine().toUpperCase());
+
+                        System.out.println(java.util.Arrays.asList(DrinkSweeteners.values()));
+                        System.out.println("Enter sweeteners: ");
+                        sweetener = DrinkSweeteners.valueOf(sc.nextLine().toUpperCase());
+
+                        result.setDrinkAdditive(additive);
+                        result.setDrinkSweetener(sweetener);
+                        break;
                     }
+                JdbcUtilsForMenu.insertOrder(result);
                 System.out.println(result);
             case 4:
                 System.out.println("View orders");
+                JdbcUtilsForMenu.read("Orders");
                 break;
             default:
                 System.out.println("Unknown selection");
