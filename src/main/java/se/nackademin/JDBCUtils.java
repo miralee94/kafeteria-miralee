@@ -6,10 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import java.sql.PreparedStatement;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
 
 import se.nackademin.Beverages.DrinkSizes;
 import se.nackademin.CoffeeDrink;
@@ -33,7 +36,7 @@ public class JDBCUtils {
         this.password = password;
     }
 
-    public List<CoffeeDrink> listBeverage_menuDetails() {
+    public List<CoffeeDrink> listBeverageMenuDetails() {
         List<CoffeeDrink> list = new ArrayList<CoffeeDrink>();
         CoffeeDrink coffeeDrink = null;
         ResultSet rs = null;
@@ -95,7 +98,7 @@ public class JDBCUtils {
             }
     }
 
-    public void createTable() {
+    public void createTableMenu() {
         String sql = """
             CREATE TABLE IF NOT EXISTS Beverage_menu (
             id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -110,6 +113,23 @@ public class JDBCUtils {
                 e.printStackTrace();
             }
         }
+        public void createTableOrders() {
+            String sql = """
+                CREATE TABLE IF NOT EXISTS Orders (
+                id MEDIUMINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                title TEXT,
+                size TEXT,
+                price DECIMAL(5,2),
+                additive TEXT,
+                sweetener TEXT
+                )
+                """;
+                try (Statement stmt = this.conn.createStatement()) {
+                    stmt.executeUpdate(sql);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         public void insertDrinksIntoTable() {
             String insertCoffee = "INSERT INTO Beverage_menu(title, size, price)" +
                                         "VALUES('Coffee', 'SMALL', 35), ('Coffee', 'MEDIUM', 45), ('Coffee', 'LARGE', 55)";
@@ -124,7 +144,7 @@ public class JDBCUtils {
             String insertMacchiato = "INSERT INTO Beverage_menu(title, size, price)" +
                                         "VALUES('Macchiato', 'SMALL', 55), ('Macchiato', 'MEDIUM', 65), ('Macchiato', 'LARGE', 75)";
             String insertIceCoffee = "INSERT INTO Beverage_menu(title, size, price)" +
-                                        "VALUES('Ice Coffe', 'SMALL', 35), ('Ice Coffee', 'MEDIUM', 45), ('Ice Coffee', 'LARGE', 55)";
+                                        "VALUES('Ice Coffee', 'SMALL', 35), ('Ice Coffee', 'MEDIUM', 45), ('Ice Coffee', 'LARGE', 55)";
             try (Statement stmt = this.conn.createStatement()) {
                 stmt.executeUpdate(insertCoffee);
                 stmt.executeUpdate(insertCappuccino);
@@ -144,7 +164,6 @@ public class JDBCUtils {
             try (Statement stmt = this.conn.createStatement()) {
                 ResultSet rs = stmt.executeQuery(select);
                 while (rs.next()) {
-                    
                 }
             } catch (SQLException e) {
                 System.out.println(e);
@@ -152,7 +171,7 @@ public class JDBCUtils {
         }
 
         public void updateValue() throws SQLException {
-            String update = "UPDATE drinks SET price = 65 WHERE title = 'Cappuccino'";
+            String update = "UPDATE beverages_menu SET price = 65 WHERE title = 'Cappuccino'";
             try (Statement stmt = this.conn.createStatement()) {
                 stmt.executeUpdate(update);
             } catch (SQLException e) {
@@ -167,6 +186,54 @@ public class JDBCUtils {
             } catch (SQLException e) {
                 System.out.println(e);
             }
+        }
+
+        // Här vill jag försöka ta ut en rad från mysql för drinkbeställning
+        public CoffeeDrink getRow(String title, DrinkSizes size) {
+            String order = "SELECT * FROM Beverage_menu WHERE title = ? AND size = ? ";
+            PreparedStatement myStmt;
+            CoffeeDrink coffeeDrink = null;
+            try (Statement stmt = this.conn.createStatement()) {
+                myStmt = this.conn.prepareStatement(order);
+                myStmt.setString(1, title);
+                myStmt.setString(2, size.toString());
+                ResultSet rs = myStmt.executeQuery();
+                while (rs.next()) {
+                    int drinkId = rs.getInt("Id");
+                    String drinkTitle = rs.getString("title");
+                    DrinkSizes drinkSize =  DrinkSizes.valueOf(rs.getString("size"));
+                    double drinkPrice = rs.getDouble("price");
+                    coffeeDrink = new CoffeeDrink(drinkTitle, drinkSize, drinkPrice);
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+            return coffeeDrink;
+        }
+
+        public CoffeeDrink insertOrder(CoffeeDrink coffee) {
+            String insertOrder = "INSERT INTO Orders WHERE title = ? AND size = ? AND price = ? AND additive = ? AND sweetener = ?";
+            PreparedStatement myStmt;
+            CoffeeDrink coffeeDrink = null;
+            try (Statement stmt = this.conn.createStatement()) {
+                myStmt = this.conn.prepareStatement(insertOrder);
+                myStmt.setString(1, coffee.getDrinkTitle());
+                myStmt.setString(2, coffee.getDrinkSize().toString());
+                myStmt.setDouble(3, coffee.getDrinkPrice());
+                myStmt.setString(4, coffee.getDrinkAdditives().toString());
+                myStmt.setString(4, coffee.getDrinkSweeteners().toString());
+                ResultSet rs = myStmt.executeQuery();
+                while (rs.next()) {
+                    int drinkId = rs.getInt("Id");
+                    String drinkTitle = rs.getString("title");
+                    DrinkSizes drinkSize =  DrinkSizes.valueOf(rs.getString("size"));
+                    double drinkPrice = rs.getDouble("price");
+                    coffeeDrink = new CoffeeDrink(drinkTitle, drinkSize, drinkPrice);
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+            return coffee;
         }
 
     public Connection getConnection() throws SQLException {

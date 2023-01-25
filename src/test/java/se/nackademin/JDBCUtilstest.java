@@ -15,7 +15,7 @@ public class JDBCUtilstest {
     public void listDrinks() {
         JDBCUtilsObject.connectToDatabase();
 
-        List<CoffeeDrink> listDrinkDetails = JDBCUtilsObject.listCoffeeDrinksDetails();
+        List<CoffeeDrink> listDrinkDetails = JDBCUtilsObject.listBeverageMenuDetails();
         // Checking whether totally 2 freelancers are available
         assertEquals(listDrinkDetails.size(), 0);
         // Checking whether first freelancer id is 1

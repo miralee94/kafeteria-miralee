@@ -7,11 +7,13 @@ interface Beverages{
         LARGE
     };
     enum DrinkAdditives{
+        NONE,
         MILK,
         LAKTOSFREE_MILK,
         ALMONDMILK,
     };
     enum DrinkSweeteners{
+        NONE,
         SUGAR,
         BROWN_SUGAR,
         HONEY,
