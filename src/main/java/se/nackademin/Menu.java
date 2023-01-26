@@ -53,7 +53,7 @@ public class Menu {
                 JdbcUtilsForMenu.createDatabase("Cafeteria");
                 JdbcUtilsForMenu.createTableMenu();
                 JdbcUtilsForMenu.createTableOrders();
-                //JdbcUtilsForMenu.insertDrinksIntoTable();
+                JdbcUtilsForMenu.insertDrinksIntoTable();
                 break;
             case 2:
                 System.out.println("View beverage menu");
@@ -67,7 +67,6 @@ public class Menu {
                 String coffee = sc.nextLine();
                 System.out.println("Enter size: ");
                 DrinkSizes size = DrinkSizes.valueOf(sc.nextLine().toUpperCase());
-                //JdbcUtilsForMenu.connectToDatabase();
                 CoffeeDrink result = null;
                 DrinkSweeteners sweetener = null;
                 DrinkAdditives additive = null;

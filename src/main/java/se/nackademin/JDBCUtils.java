@@ -38,7 +38,7 @@ public class JDBCUtils {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    //return list of Menu
     public List<CoffeeDrink> listBeverageMenuDetails() {
         List<CoffeeDrink> list = new ArrayList<CoffeeDrink>();
         CoffeeDrink coffeeDrink = null;
@@ -57,7 +57,6 @@ public class JDBCUtils {
                 DrinkSizes drinkSize =  DrinkSizes.valueOf(rs.getString("size"));
                 double drinkPrice = rs.getDouble("price");
 
-
                 coffeeDrink = new CoffeeDrink(drinkTitle, drinkSize, drinkPrice);
                 coffeeDrink.setDrinkId(drinkId);
                 list.add(coffeeDrink);
@@ -70,6 +69,7 @@ public class JDBCUtils {
         return list;
     }
 
+    // create db method
     public void createDatabase(String name) {
         String createString = "create database IF NOT EXISTS " + name;
         try (Statement stmt = this.conn.createStatement()) {
@@ -79,28 +79,21 @@ public class JDBCUtils {
         }
     }
 
+    //connect to db method
     public void connectToDatabase() {
         try {
             this.setUsername("root"); // Never use the root user in real apps
             this.setPassword("miradocker94"); // Never add hardcoded passwords to your code
             this.conn = this.getConnection();
-            //jdbcUtils.createDatabase(conn, "Beverage menu"); // This will create the database with no tables
-            //jdbcUtils.createTable(conn);
-            //jdbcUtils.insertIntoTable(conn);
-            //jdbcUtils.readTable(conn, "drinks");
-            //jdbcUtils.updateValue(conn);
-            //jdbcUtils.deleteRow(conn);
-            //jdbcUtils.readTable(conn, "drinks");
             }
         catch (SQLException e){
             System.out.println(e.getMessage());
             System.out.println("Something went wrong with mysql");
             }
-        //finally {
-        //    System.out.println("I am in final block");
-        //    }
+
     }
 
+    // create table Menu
     public void createTableMenu() {
         String sql = """
             CREATE TABLE IF NOT EXISTS Beverage_menu (
@@ -116,6 +109,8 @@ public class JDBCUtils {
                 e.printStackTrace();
             }
         }
+
+    //create table orders
     public void createTableOrders() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Orders (
@@ -133,6 +128,8 @@ public class JDBCUtils {
                     e.printStackTrace();
                 }
             }
+
+    //insert hardcoded data into table menu
     public void insertDrinksIntoTable() {
         String insertCoffee = "INSERT INTO Beverage_menu(title, size, price)" +
                                         "VALUES('Coffee', 'SMALL', 35), ('Coffee', 'MEDIUM', 45), ('Coffee', 'LARGE', 55)";
@@ -161,18 +158,7 @@ public class JDBCUtils {
             }
         }
 
-
-    public void read(String tableName) {
-        String select = "SELECT * FROM " + tableName;
-        try (Statement stmt = this.conn.createStatement()) {
-            ResultSet rs = stmt.executeQuery(select);
-            while (rs.next()) {
-                }
-        } catch (SQLException e) {
-            System.out.println(e);
-            }
-        }
-
+    //insert data into Orders
     public List<CoffeeDrink> listOrders() {
         List<CoffeeDrink> list = new ArrayList<CoffeeDrink>();
         CoffeeDrink coffeeDrink = null;
@@ -207,7 +193,7 @@ public class JDBCUtils {
         return list;
     }
 
-        // Här vill jag försöka ta ut en rad från mysql för drinkbeställning
+    // getting row for mapping coffeeDrink from menu for make order
     public CoffeeDrink getRow(String title, DrinkSizes size) {
         String order = "SELECT * FROM Beverage_menu WHERE title = ? AND size = ? ";
         PreparedStatement myStmt;
@@ -218,7 +204,6 @@ public class JDBCUtils {
                 myStmt.setString(2, size.toString());
                 ResultSet rs = myStmt.executeQuery();
             while (rs.next()) {
-                    int drinkId = rs.getInt("Id");
                     String drinkTitle = rs.getString("title");
                     DrinkSizes drinkSize =  DrinkSizes.valueOf(rs.getString("size"));
                     double drinkPrice = rs.getDouble("price");
@@ -230,6 +215,7 @@ public class JDBCUtils {
         return coffeeDrink;
         }
 
+    // another method for insert into table orders
     public String insertOrder(CoffeeDrink coffee) {
         String insertOrder = "INSERT INTO Orders (title, size, price, additive, sweetener)" +
                             "VALUES(?, ?, ?, ?, ?)";
@@ -249,6 +235,7 @@ public class JDBCUtils {
         return result;
         }
 
+    //Method that returns connection for db
     public Connection getConnection() throws SQLException {
         //Connection conn = null;
         Properties connectionProps = new Properties();

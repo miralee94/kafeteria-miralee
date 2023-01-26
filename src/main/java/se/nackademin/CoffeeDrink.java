@@ -1,12 +1,13 @@
 package se.nackademin;
 
+//Class CoffeeDrink for all the drinks in the menu
 public class CoffeeDrink implements Beverages{
 
     private int drinkId;
-
     private String drinkTitle;
     private DrinkSizes drinkSize;
     private double drinkPrice;
+    //Default values
     private DrinkAdditives drinkAdditive = DrinkAdditives.NONE;
     private DrinkSweeteners drinkSweetener = DrinkSweeteners.NONE;
 
@@ -22,6 +23,7 @@ public class CoffeeDrink implements Beverages{
         this.drinkSweetener = drinkSweetener;
     }
 
+    //Construktor with mandatory values
     public CoffeeDrink(String drinkTitle, DrinkSizes drinkSize, double drinkPrice) {
         this.drinkTitle = drinkTitle;
         this.drinkSize = drinkSize;
@@ -36,6 +38,7 @@ public class CoffeeDrink implements Beverages{
     public DrinkAdditives getDrinkAdditives() {return this.drinkAdditive;}
     public DrinkSweeteners getDrinkSweeteners() {return this.drinkSweetener;}
 
+    //Print this format of CoffeeDrink
     @Override
     public String toString() {
         return this.drinkId + " " +
