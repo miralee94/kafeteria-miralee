@@ -141,7 +141,8 @@ public class Menu {
                 System.out.println(result);
             case 4:
                 System.out.println("View orders");
-                JdbcUtilsForMenu.read("Orders");
+                List<CoffeeDrink>orders = JdbcUtilsForMenu.listOrders();
+                orders.forEach(System.out::println);
                 break;
             default:
                 System.out.println("Unknown selection");

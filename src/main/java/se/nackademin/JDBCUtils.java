@@ -16,6 +16,7 @@ import com.mysql.cj.protocol.Resultset;
 
 import se.nackademin.Beverages.DrinkAdditives;
 import se.nackademin.Beverages.DrinkSizes;
+import se.nackademin.Beverages.DrinkSweeteners;
 import se.nackademin.CoffeeDrink;
 
 public class JDBCUtils {
@@ -172,23 +173,39 @@ public class JDBCUtils {
             }
         }
 
-    //public void updateValue() throws SQLException {
-    //    String update = "UPDATE beverages_menu SET price = 65 WHERE title = 'Cappuccino'";
-    //    try (Statement stmt = this.conn.createStatement()) {
-    //            stmt.executeUpdate(update);
-    //    } catch (SQLException e) {
-    //            System.out.println(e);
-    //        }
-    //    }
-//
-    //public void deleteRow() throws SQLException {
-    //    String update = "DELETE FROM drinks WHERE price = 55";
-    //    try (Statement stmt = this.conn.createStatement()) {
-    //            stmt.executeUpdate(update);
-    //    } catch (SQLException e) {
-    //            System.out.println(e);
-    //        }
-    //    }
+    public List<CoffeeDrink> listOrders() {
+        List<CoffeeDrink> list = new ArrayList<CoffeeDrink>();
+        CoffeeDrink coffeeDrink = null;
+        ResultSet rs = null;
+        Statement stmt = null;
+        // Write the SQL query
+        String query = "select * from Orders";
+        try {
+            stmt = this.conn.createStatement();
+            rs = stmt.executeQuery(query);
+            // Iterate the whole resultset and add the data
+            // in the list
+            while (rs.next()) {
+                int drinkId = rs.getInt("Id");
+                String drinkTitle = rs.getString("title");
+                DrinkSizes drinkSize =  DrinkSizes.valueOf(rs.getString("size"));
+                double drinkPrice = rs.getDouble("price");
+                DrinkAdditives drinkAdditive = DrinkAdditives.valueOf(rs.getString("additive"));
+                DrinkSweeteners drinkSweetener = DrinkSweeteners.valueOf(rs.getString("sweetener"));
+
+                coffeeDrink = new CoffeeDrink(drinkTitle, drinkSize, drinkPrice);
+                coffeeDrink.setDrinkId(drinkId);
+                coffeeDrink.setDrinkAdditive(drinkAdditive);
+                coffeeDrink.setDrinkSweetener(drinkSweetener);
+                list.add(coffeeDrink);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 
         // Här vill jag försöka ta ut en rad från mysql för drinkbeställning
     public CoffeeDrink getRow(String title, DrinkSizes size) {
