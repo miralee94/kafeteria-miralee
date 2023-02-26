@@ -1,5 +1,7 @@
 package se.nackademin;
-
+/**
+ * The Beverages interface defines different types of DrinkSizes, DrinkAdditives and DrinkSweeterners that can be used to customize a drink order.
+ */
 interface Beverages{
     enum DrinkSizes{
         SMALL,

@@ -2,26 +2,29 @@ package se.nackademin;
 
 import java.io.IOException;
 import java.util.Scanner;
-
-import javax.swing.JButton;
-
 import se.nackademin.Beverages.DrinkAdditives;
 import se.nackademin.Beverages.DrinkSizes;
 import se.nackademin.Beverages.DrinkSweeteners;
-
-import java.sql.SQLException;
-import java.sql.Connection;
-
 import java.util.List;
 
+
 public class Menu {
+    /**
+    * The main method of the application, which sets up a Scanner object to read user input and calls the menu() method to display the menu of available options.
+    * @param args an array of command-line arguments
+    * @throws Exception
+    */
     public static void main(String[] args) throws Exception {
         try (Scanner sc = new Scanner(System.in)) {
             menu(sc);
             }
         }
-
-
+    /**
+     * Displays the menu of available options to the user and reads their input to determine which action to take.
+     * @param sc a Scanner object used to read user input
+     * @throws IOException if an I/O error occurs while reading input
+     * @throws ClassNotFoundException if the JDBC driver class cannot be found
+     */
     static void menu(Scanner sc) throws IOException, ClassNotFoundException {
         while (true) {
             String menuText = """
@@ -44,7 +47,10 @@ public class Menu {
             }
         }
     }
-
+    /**
+    * Processes the user's choice from the menu and performs the appropriate action.
+    * @param choice the user's choice from the menu
+    */
     static void menuChoices(int choice) throws IOException, ClassNotFoundException {
         JDBCUtils JdbcUtilsForMenu = new JDBCUtils("127.0.0.1", "3306");
         JdbcUtilsForMenu.connectToDatabase();
@@ -62,8 +68,8 @@ public class Menu {
                 break;
             case 3:
                 System.out.println("Place order");
+                System.out.println("Enter a title of beverage: ");
                 Scanner sc = new Scanner(System.in);
-                System.out.print("Enter title of beverage: ");
                 String coffee = sc.nextLine();
                 System.out.println("Enter size: ");
                 DrinkSizes size = DrinkSizes.valueOf(sc.nextLine().toUpperCase());
@@ -137,7 +143,8 @@ public class Menu {
                         break;
                     }
                 JdbcUtilsForMenu.insertOrder(result);
-                System.out.println(result);
+                System.out.println("Done!");
+                break;
             case 4:
                 System.out.println("View orders");
                 List<CoffeeDrink>orders = JdbcUtilsForMenu.listOrders();

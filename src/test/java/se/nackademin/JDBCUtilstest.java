@@ -1,16 +1,9 @@
 package se.nackademin;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import java.util.List;
-import java.util.Scanner;
-
 import org.junit.Test;
-
 import se.nackademin.Beverages.DrinkSizes;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class JDBCUtilsTest {
 
