@@ -70,7 +70,7 @@ public class Menu {
                 System.out.println("Place order");
                 System.out.println("Enter a title of beverage: ");
                 Scanner sc = new Scanner(System.in);
-                String coffee = sc.nextLine();
+                String coffee = sc.nextLine().toUpperCase();
                 System.out.println("Enter size: ");
                 DrinkSizes size = DrinkSizes.valueOf(sc.nextLine().toUpperCase());
                 CoffeeDrink result = null;
@@ -78,7 +78,7 @@ public class Menu {
                 DrinkAdditives additive = null;
                 result = JdbcUtilsForMenu.getRow(coffee, size);
                 switch (coffee) {
-                    case "Coffee":
+                    case "COFFEE":
                         System.out.println(java.util.Arrays.asList(DrinkAdditives.values()));
                         System.out.println("Enter additives: ");
                         additive = DrinkAdditives.valueOf(sc.nextLine().toUpperCase());
@@ -91,13 +91,13 @@ public class Menu {
                         result.setDrinkSweetener(sweetener);
                         break;
 
-                    case "Cappuccino":
+                    case "CAPPUCCINO":
                         System.out.println(java.util.Arrays.asList(DrinkSweeteners.values()));
                         System.out.println("Enter sweeteners: ");
                         sweetener = DrinkSweeteners.valueOf(sc.nextLine().toUpperCase());
 
                         result.setDrinkSweetener(sweetener);
-                    case "Latte":
+                    case "LATTE":
 
                         System.out.println(java.util.Arrays.asList(DrinkSweeteners.values()));
                         System.out.println("Enter sweeteners: ");
@@ -106,7 +106,7 @@ public class Menu {
                         result.setDrinkSweetener(sweetener);
                         break;
 
-                    case "Americano":
+                    case "AMERICANO":
                         System.out.println(java.util.Arrays.asList(DrinkAdditives.values()));
                         System.out.println("Enter additives: ");
                         additive = DrinkAdditives.valueOf(sc.nextLine().toUpperCase());
@@ -118,7 +118,7 @@ public class Menu {
                         result.setDrinkAdditive(additive);
                         result.setDrinkSweetener(sweetener);
                         break;
-                    case "Espresso":
+                    case "ESPRESSO":
                         System.out.println(java.util.Arrays.asList(DrinkSweeteners.values()));
                         System.out.println("Enter sweeteners: ");
                         sweetener = DrinkSweeteners.valueOf(sc.nextLine().toUpperCase());
@@ -126,10 +126,10 @@ public class Menu {
                         result.setDrinkSweetener(sweetener);
                         break;
 
-                    case "Macchiato":
+                    case "MACCHIATO":
                         break;
 
-                    case "Ice Coffee":
+                    case "ICE COFFEE":
                         System.out.println(java.util.Arrays.asList(DrinkAdditives.values()));
                         System.out.println("Enter additives: ");
                         additive = DrinkAdditives.valueOf(sc.nextLine().toUpperCase());
